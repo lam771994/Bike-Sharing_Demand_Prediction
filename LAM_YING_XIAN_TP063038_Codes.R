@@ -1,0 +1,712 @@
+##Data Preparation (EDA)##
+
+#Load library
+library(readxl)
+library(dplyr)
+library(DataExplorer)
+
+#Load data
+bike <- read_xlsx('/Users/lamyingxian/Desktop/Desktop - iMac Lam/DSBA_2021/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/Datasets/bike-sharing.xlsx')
+str(bike)
+
+#Convert numeric to integer
+bike <- bike %>% mutate_if(is.numeric,as.integer)
+
+#Convert character to factor
+bike$season <- as.factor(bike$season)
+bike$holiday <- as.factor(bike$holiday)
+bike$workingday <- as.factor(bike$workingday)
+bike$weather <- as.factor(bike$weather)
+bike$datetime <- as.factor(bike$datetime)
+
+#Level the factor
+bike1 <- bike
+levels(bike1$season) <- c('Spring','Summer','Fall','Winter')
+bike1 %>% group_by(season) %>% 
+  summarise(Count=n(),Percentage = round(n()/nrow(.) * 100, 2)) %>%
+  arrange(desc(Count))
+
+levels(bike1$holiday) <- c('Not Holiday','Holiday')
+bike1 %>% group_by(holiday) %>% 
+  summarise(Count=n(),Percentage = round(n()/nrow(.) * 100, 2)) %>%
+  arrange(desc(Count))
+
+
+levels(bike1$workingday) <- c('Not Working Day','Working Day')
+bike1 %>% group_by(workingday) %>% 
+  summarise(Count=n(),Percentage = round(n()/nrow(.) * 100, 2)) %>%
+  arrange(desc(Count))
+
+levels(bike1$weather) <- c('Clear','Cloudy','Rain','Heavy')
+bike1 %>% group_by(weather) %>% 
+  summarise(Count=n(),Percentage = round(n()/nrow(.) * 100, 2)) %>%
+  arrange(desc(Count))
+
+#Plot structure of data
+bike_list <- list(bike)
+plot_str(bike,fontSize = 20)
+
+#Generate EDA report
+create_report(bike1)                       
+
+
+#2. Factor column
+
+bike1 %>%group_by(season) %>% summarise(Count = n(),Perc=round(n()/nrow(.)*100,2)) %>% arrange(desc(Count))
+
+bike1 %>%group_by(holiday) %>% summarise(Count = n(),Perc=round(n()/nrow(.)*100,2)) %>% arrange(desc(Count))
+
+bike1 %>%group_by(workingday) %>% summarise(Count = n(),Perc=round(n()/nrow(.)*100,2)) %>% arrange(desc(Count))
+
+bike1 %>%group_by(weather) %>% summarise(Count = n(),Perc=round(n()/nrow(.)*100,2)) %>% arrange(desc(Count))
+
+bike1 %>%group_by(datetime) %>% summarise(Count = n(),Perc=round(n()/nrow(.)*100,2)) %>% arrange(desc(Count))
+
+
+#3. Continuous column
+
+
+bike1%>%filter(!is.na(temp))%>% summarise(Max=max(temp), Min=min(temp), Mean=mean(temp), Median=median(temp), QUA1=quantile(temp,1/4),QUA3=quantile(temp,3/4),IQR=IQR(temp))
+
+bike1%>%filter(!is.na(atemp))%>% summarise(Max=max(atemp), Min=min(atemp), Mean=mean(atemp), Median=median(atemp), QUA1=quantile(atemp,1/4),QUA3=quantile(atemp,3/4),IQR=IQR(atemp))
+
+bike1%>%filter(!is.na(humidity))%>% summarise(Max=max(humidity), Min=min(humidity), Mean=mean(humidity), Median=median(humidity), QUA1=quantile(humidity,1/4),QUA3=quantile(humidity,3/4),IQR=IQR(humidity))
+
+bike1%>%filter(!is.na(windspeed))%>% summarise(Max=max(windspeed), Min=min(windspeed), Mean=mean(windspeed), Median=median(windspeed), QUA1=quantile(windspeed,1/4),QUA3=quantile(windspeed,3/4),IQR=IQR(windspeed))
+
+bike1%>%filter(!is.na(casual))%>% summarise(Max=max(casual), Min=min(casual), Mean=mean(casual), Median=median(casual), QUA1=quantile(casual,1/4),QUA3=quantile(casual,3/4),IQR=IQR(casual))
+
+bike1%>%filter(!is.na(registered))%>% summarise(Max=max(registered), Min=min(registered), Mean=mean(registered), Median=median(registered), QUA1=quantile(registered,1/4),QUA3=quantile(registered,3/4),IQR=IQR(registered))
+
+bike1%>%filter(!is.na(count))%>% summarise(Max=max(count), Min=min(count), Mean=mean(count), Median=median(count), QUA1=quantile(count,1/4),QUA3=quantile(count,3/4),IQR=IQR(count))
+
+#4. Correlation
+
+
+plot_correlation(bike1)
+
+
+#5. Boxplot - outliers identification
+
+plot_boxplot(bike1, 'count')
+
+##Data Preparation (Data Cleaning)##
+
+#Read data
+
+library(readxl)
+library(DataExplorer)
+library(caTools)
+library(caret)
+library(ggplot2)
+
+setwd("/Users/lamyingxian/Desktop/Desktop - iMac Lam/DSBA_2021/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B")
+
+data <- read_excel('/Users/lamyingxian/Desktop/Desktop - iMac Lam/DSBA_2021/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/Datasets/bike-sharing.xlsx')
+
+
+
+#Data Spliting
+
+#Train-test splitting
+
+set.seed(123)
+split = sample.split(data$count, SplitRatio = 0.8)
+train = subset(data, split == TRUE)
+test = subset(data, split == FALSE)
+introduce(train)
+introduce(test)
+
+
+
+#Data Cleaning - Outliers
+
+
+plot_boxplot(train[,c('casual','count')], by = "count")
+train_casual<-train$casual
+bplot_casual<-boxplot(train_casual)
+
+#Removing outliers - casual
+lowerwhisker_casual<-bplot_casual$stats[1]
+upperwhisker_casual<-bplot_casual$stats[5]
+removed_outlier_casual<-train[train$casual>lowerwhisker_casual & train$casual<upperwhisker_casual,]
+
+#Observing whether outliers are removed
+plot_boxplot(removed_outlier_casual[,c('casual','count')], by = "count")
+
+#Identifying outliers - windspeed
+plot_boxplot(train[,c('windspeed','count')], by = "count")
+train_windspeed<-train$windspeed
+bplot_windspeed<-boxplot(train_windspeed)
+
+#Removing outliers - windspeed
+lowerwhisker_windspeed<-bplot_windspeed$stats[1]
+upperwhisker_windspeed<-bplot_windspeed$stats[5]
+removed_outlier_windspeed<-train[train$windspeed>lowerwhisker_windspeed & train$windspeed<upperwhisker_windspeed,]
+
+#Observing whether outliers are removed
+plot_boxplot(removed_outlier_windspeed[,c('windspeed','count')], by = "count")
+
+
+
+#Data Transformation 
+
+library(dplyr)
+library(lubridate)
+library(caret)
+
+#Data transformation
+
+#Check the data type of the variables
+str(data)
+
+#Convert character to datetime
+train = train %>% mutate_if(is.character, as.POSIXct)
+test = test %>% mutate_if(is.character, as.POSIXct)
+
+#Check the transformed data
+str(train)
+str(test)
+
+#Scaling
+
+numeric_data <- c("temp","atemp","humidity","windspeed","casual","registered")
+scaling_numeric <- function(train,test) {
+  scaling <- preProcess(train, method=c("center","scale"))
+  i <- predict(scaling,train)
+  j <- predict(scaling,test)
+  return (list(i,j))
+}
+
+numeric = scaling_numeric(train[numeric_data], test[numeric_data])
+numeric
+
+
+
+##Model Implementation & Validation##
+
+#Libraries for all the model implementation and validation
+
+#To load all the necessary libraries for model implementation & validation
+library(rpart) #to implement regression tree
+library(readxl) #to read excel files
+library(DataExplorer) #for data exploration 
+library(caTools) #for data splitting
+library(caret) #for bagging and parameter tuning
+library(ggplot2) #to create plots
+library(rpart.plot) #plotting regression tree
+library(party) #for recursive partitioning
+library(MLmetrics) #evaluation metrics for machine learning
+library(tidyverse) #collection of packages
+library(randomForest) # to implement random forest
+library(ranger) # for a quicker implementation of randomForest
+library(gbm) #to implement gradient boosting 
+library(xgboost) #for a quicker implementation of gbm
+
+
+
+#Decision Tree Regression
+
+# Importing the data
+train <- read_excel("/Users/lamyingxian/Desktop/Desktop - iMac Lam/DSBA_2021/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/Datasets/train.xlsx")
+
+
+test <- read_excel("/Users/lamyingxian/Desktop/Desktop - iMac Lam/DSBA_2021/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/Datasets/test.xlsx")
+
+# Fitting Decision Tree Regression to the Training set (All features)
+DT_regressor = rpart(count ~ datetime + season + holiday + workingday +
+                       weather + temp + humidity + windspeed + 
+                       casual + registered, method = "anova", data = train)
+
+#Plot the tree
+rpart.plot(DT_regressor)
+
+#Look at the cp
+plotcp(DT_regressor)
+DT_regressor$cptable
+
+#Predict the train dataset
+train_pred = predict(DT_regressor, newdata = train)
+
+# Predicting the test dataset 
+test_pred = predict(DT_regressor, newdata = test)
+
+# RMSLE on train set
+RMSLE_train = RMSLE(y_pred = train_pred, y_true = train$count)
+RMSLE_train
+
+# RMSLE on test set
+RMSLE_test = RMSLE(y_pred = test_pred, y_true = test$count)
+RMSLE_test
+
+#Compare train and test
+table(RMSLE_train,RMSLE_test)
+
+
+
+
+
+#Decision tree regression with hyperparameter tuning
+
+#Perform parameter tuning using GridSearch
+
+grid_search = train(form = count ~ ., data = train, method = 'rpart',metric ='RMSE', tuneLength=10)
+grid_search
+
+grid_search$finalModel$control
+
+#Fit optimal parameter into model
+optimal_DT_regressor <- rpart(
+  formula = count ~ .,
+  data    = train,
+  method  = "anova", 
+  control = list(minsplit = 20, minbucket = 7,cp = 0)
+)
+
+
+
+#Predict train & test
+pred_train <- predict(optimal_DT_regressor, newdata = train)
+pred_test <- predict(optimal_DT_regressor, newdata = test)
+
+#Result
+RMSLE_train = RMSLE(y_pred = pred_train, y_true = train$count)
+RMSLE_test = RMSLE(y_pred = pred_test, y_true = test$count)
+
+table(RMSLE_train,RMSLE_test)
+
+
+
+
+
+#Decision tree regression with outlier treatment
+
+
+# Importing the data
+
+train_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_outliertreatment.xlsx")
+
+test_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_outliertreatment.xlsx")
+
+# Fitting Decision Tree Regression to the Training set (All features)
+DT_regressor_outlier = rpart(formula = count ~ .,
+                             data    = train_outlier,
+                             method  = "anova",
+                             control = list(minsplit = 20, maxdepth = 7, cp = 0))
+
+grid_search = train(form = count ~ ., data = train_outlier, method = 'rpart',metric ='RMSE', tuneLength=10)
+grid_search
+
+grid_search$finalModel$control
+
+#Plot the tree
+rpart.plot(DT_regressor_outlier)
+
+#Look at the cp
+plotcp(DT_regressor_outlier)
+
+#Predict the train dataset
+train_pred_outlier = predict(DT_regressor_outlier, train_outlier)
+
+# Predicting the test dataset 
+test_pred_outlier = predict(DT_regressor_outlier, newdata = test_outlier)
+
+# RMSLE on train set
+RMSLE_train_outlier = RMSLE(y_pred = train_pred_outlier, y_true = train_outlier$count)
+RMSLE_train_outlier
+
+# RMSLE on test set
+RMSLE_test_outlier = RMSLE(y_pred = test_pred_outlier, y_true = test_outlier$count)
+RMSLE_test_outlier
+
+#Compare train and test
+table(RMSLE_train_outlier,RMSLE_test_outlier)
+
+
+
+
+
+#Decision tree regression with scaling
+
+
+# Importing the data
+
+train_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_scaling.xlsx")
+
+test_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_scaling.xlsx")
+
+# Fitting Decision Tree Regression to the Training set (All features)
+DT_regressor_scaling = rpart(formula = count ~ .,
+                             data    = train_scaling,
+                             method  = "anova",
+                             control = list(minsplit = 20, maxdepth = 7, cp = 0))
+
+
+#Plot the tree
+rpart.plot(DT_regressor_scaling)
+
+#Look at the cp
+plotcp(DT_regressor_scaling)
+
+#Predict the train dataset
+train_pred_scaling = predict(DT_regressor_scaling, train_scaling)
+
+# Predicting the test dataset 
+test_pred_scaling = predict(DT_regressor_scaling, newdata = test_scaling)
+
+# RMSLE on train set
+RMSLE_train_scaling = RMSLE(y_pred = train_pred_scaling, y_true = train_scaling$count)
+RMSLE_train_scaling
+
+# RMSLE on test set
+RMSLE_test_scaling = RMSLE(y_pred = test_pred_scaling, y_true = test_scaling$count)
+RMSLE_test_scaling
+
+#Compare train and test
+table(RMSLE_train_scaling,RMSLE_test_scaling)
+
+
+
+
+
+#######################################################################
+
+#Random Forest regression
+
+```{r}
+# Importing the data
+train <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train.xlsx")
+
+test <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test.xlsx")
+
+
+# Fitting Random Forest Regression to the Training set (All features)
+RF_regressor = randomForest(formula = count ~ .,
+                            data = train)
+
+RF_regressor 
+
+#Plot the tree
+plot(RF_regressor)
+
+#Number of trees with lowest error
+which.min(RF_regressor$mse)
+
+#Check mtry
+RF_regressor$mtry
+
+#Predict the train dataset
+train_pred = predict(RF_regressor, newdata = train)
+
+# Predicting the test dataset 
+test_pred = predict(RF_regressor, newdata = test)
+
+# RMSLE on train set
+RMSLE_train = RMSLE(y_pred = train_pred, y_true = train$count)
+RMSLE_train
+
+# RMSLE on test set
+RMSLE_test = RMSLE(y_pred = test_pred, y_true = test$count)
+RMSLE_test
+
+#Compare train and test
+table(RMSLE_train,RMSLE_test)
+
+
+
+
+
+
+#Random Forest regression with hyperparameter tuning
+
+# Separate predictors from target variable
+features <- setdiff(names(train), "count")
+
+set.seed(123)
+
+#Perform parameter tuning using GridSearch
+RF_gridsearch <- tuneRF(x = train[features],
+                        y          = train$count,
+                        ntreeTry   = 500,
+                        mtryStart  = 3,
+                        stepFactor = 1.5,
+                        improve    = 0.01,
+                        trace      = FALSE)
+
+#Fit optimal parameter into model
+optimal_RF_regressor <- randomForest(count~.,data = train,
+                                     ntreeTry = 500,
+                                     mtry=9,
+                                     importance = TRUE,
+                                     proximity = TRUE)
+print(optimal_RF_regressor)
+
+#Predict train & test
+pred_train <- predict(optimal_RF_regressor, newdata = train)
+pred_test <- predict(optimal_RF_regressor, newdata = test)
+
+#Result
+RMSLE_train = RMSLE(y_pred = pred_train, y_true = train$count)
+RMSLE_test = RMSLE(y_pred = pred_test, y_true = test$count)
+
+table(RMSLE_train,RMSLE_test)
+
+
+#Random Forest regression with outlier treatment
+
+# Importing the data
+
+train_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_outliertreatment.xlsx")
+
+test_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_outliertreatment.xlsx")
+
+#Fit optimal parameter into model
+RF_regressor_outlier <- randomForest(count~.,data = train_outlier,
+                                     ntreeTry = 500,
+                                     mtry=9,
+                                     importance = TRUE,
+                                     proximity = TRUE)
+print(RF_regressor_outlier)
+
+#Predict train & test
+pred_train_outlier <- predict(RF_regressor_outlier, newdata = train_outlier)
+pred_test_outlier <- predict(RF_regressor_outlier, newdata = test_outlier)
+
+#Result
+RMSLE_train_outlier = RMSLE(y_pred = pred_train_outlier, y_true = train_outlier$count)
+RMSLE_test_outlier = RMSLE(y_pred = pred_test_outlier, y_true = test_outlier$count)
+
+table(RMSLE_train_outlier,RMSLE_test_outlier)
+
+
+
+
+
+#Random Forest regression with data scaling
+
+
+# Importing the data
+
+train_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_scaling.xlsx")
+
+test_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_scaling.xlsx")
+
+#Fit optimal parameter into model
+RF_regressor_scaling <- randomForest(count~.,data = train_scaling,
+                                     ntreeTry = 500,
+                                     mtry=9,
+                                     importance = TRUE,
+                                     proximity = TRUE)
+print(RF_regressor_scaling)
+
+#Predict train & test
+pred_train_scaling <- predict(RF_regressor_scaling, newdata = train_scaling)
+pred_test_scaling <- predict(RF_regressor_scaling, newdata = test_scaling)
+
+#Result
+RMSLE_train_scaling = RMSLE(y_pred = pred_train_scaling, y_true = train_scaling$count)
+RMSLE_test_scaling = RMSLE(y_pred = pred_test_scaling, y_true = test_scaling$count)
+
+table(RMSLE_train_scaling,RMSLE_test_scaling)
+
+
+
+
+
+#######################################################################
+
+#Gradient Boosting
+
+# Importing the data
+train <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train.xlsx")
+
+test <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test.xlsx")
+
+
+# Fitting Random Forest Regression to the Training set (All features)
+GB_regressor = gbm(formula = count ~ .,
+                   distribution = "gaussian",
+                   data = train,
+                   n.trees = 10000,
+                   interaction.depth = 1,
+                   shrinkage = 0.01,
+                   cv.folds = 5,
+                   n.cores = NULL, # will use all cores by default
+                   verbose = FALSE)
+
+GB_regressor 
+
+# plot loss function as a result of n trees added to the ensemble
+gbm.perf(GB_regressor, method = "OOB")
+
+#Predict the train dataset
+train_pred = predict(GB_regressor , newdata = train)
+
+# Predicting the test dataset 
+test_pred = predict(GB_regressor , newdata = test)
+
+# RMSLE on train set
+RMSLE_train = RMSLE(y_pred = train_pred, y_true = train$count)
+RMSLE_train
+
+# RMSLE on test set
+RMSLE_test = RMSLE(y_pred = test_pred, y_true = test$count)
+RMSLE_test
+
+#Compare train and test
+table(RMSLE_train,RMSLE_test)
+
+
+
+#Gradient Boosting with hyperparameter tuning
+
+
+# Importing the data
+train <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train.xlsx")
+
+test <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test.xlsx")
+
+# create grid search
+hyper_grid <- expand.grid(
+  learning_rate = c(0.005, 0.01, 0.05, 0.3),
+  RMSE = NA,
+  trees = NA,
+  time = NA
+)
+
+# execute grid search
+for(i in seq_len(nrow(hyper_grid))) {
+  
+  # fit gbm
+  set.seed(123)  # for reproducibility
+  train_parameter <- system.time({
+    m <- gbm(
+      formula = count ~ .,
+      data = train,
+      distribution = "gaussian",
+      n.trees = 5000, 
+      shrinkage = hyper_grid$learning_rate[i], 
+      interaction.depth = 1, 
+      n.minobsinnode = 10,
+      cv.folds = 5
+    )
+  })
+  
+  # add SSE, trees, and training time to results
+  hyper_grid$RMSE[i]  <- sqrt(min(m$cv.error))
+  hyper_grid$trees[i] <- which.min(m$cv.error)
+  hyper_grid$Time[i]  <- train_parameter[["elapsed"]]
+  
+}
+
+# results
+arrange(hyper_grid, RMSE)
+
+
+# Fitting optimal parameter to gradient boosting regression
+GB_regressor= gbm(formula = count ~ .,
+                  distribution = "gaussian",
+                  data = train,
+                  n.trees = 5000,
+                  interaction.depth = 1,
+                  shrinkage = 0.03,
+                  cv.folds = 5,
+                  n.cores = NULL, # will use all cores by default
+                  verbose = FALSE)
+
+GB_regressor 
+
+# plot loss function as a result of n trees added to the ensemble
+gbm.perf(GB_regressor, method = "OOB")
+
+#Predict the train dataset
+train_pred = predict(GB_regressor , newdata = train)
+
+# Predicting the test dataset 
+test_pred = predict(GB_regressor , newdata = test)
+
+# RMSLE on train set
+RMSLE_train = RMSLE(y_pred = train_pred, y_true = train$count)
+RMSLE_train
+
+# RMSLE on test set
+RMSLE_test = RMSLE(y_pred = test_pred, y_true = test$count)
+RMSLE_test
+
+#Compare train and test
+table(RMSLE_train,RMSLE_test)
+
+
+
+
+
+#Gradient Boosting with outlier treatment
+
+
+# Importing the data
+
+train_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_outliertreatment.xlsx")
+
+test_outlier <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_outliertreatment.xlsx")
+
+# Fitting optimal parameter to gradient boosting regression
+GB_regressor_outlier= gbm(formula = count ~ .,
+                          distribution = "gaussian",
+                          data = train,
+                          n.trees = 5000,
+                          interaction.depth = 1,
+                          shrinkage = 0.03,
+                          cv.folds = 5,
+                          n.cores = NULL, # will use all cores by default
+                          verbose = FALSE)
+
+GB_regressor_outlier 
+
+
+#Predict train & test
+pred_train_outlier <- predict(GB_regressor_outlier, newdata = train_outlier)
+pred_test_outlier <- predict(GB_regressor_outlier, newdata = test_outlier)
+
+#Result
+RMSLE_train_outlier = RMSLE(y_pred = pred_train_outlier, y_true = train_outlier$count)
+RMSLE_test_outlier = RMSLE(y_pred = pred_test_outlier, y_true = test_outlier$count)
+
+table(RMSLE_train_outlier,RMSLE_test_outlier)
+
+
+
+
+
+#Gradient Boosting with data scaling
+
+
+# Importing the data
+
+train_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/train_scaling.xlsx")
+
+test_scaling <- read_excel("/Users/lamyingxian/Dropbox/*MSc Data Science & Business Analytics/4. Applied Machine Learning/3. Assignments-20210215/Assignment - Part B/test_scaling.xlsx")
+
+#Fit optimal parameter into model
+GB_regressor_scaling= gbm(formula = count ~ .,
+                          distribution = "gaussian",
+                          data = train,
+                          n.trees = 5000,
+                          interaction.depth = 1,
+                          shrinkage = 0.03,
+                          cv.folds = 5,
+                          n.cores = NULL, # will use all cores by default
+                          verbose = FALSE)
+
+GB_regressor_scaling 
+
+#Predict train & test
+pred_train_scaling <- predict(GB_regressor_scaling, newdata = train_scaling)
+pred_test_scaling <- predict(GB_regressor_scaling, newdata = test_scaling)
+
+#Result
+RMSLE_train_scaling = RMSLE(y_pred = pred_train_scaling, y_true = train_scaling$count)
+RMSLE_test_scaling = RMSLE(y_pred = pred_test_scaling, y_true = test_scaling$count)
+
+table(RMSLE_train_scaling,RMSLE_test_scaling)
+
+
