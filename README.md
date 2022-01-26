@@ -15,4 +15,4 @@ C.	To explore the correlation between features and discover the most relevant fe
 
 ## Analysis of Other Related Projects
 
-![alt text](Related_Works_1.png)
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_1.png)
