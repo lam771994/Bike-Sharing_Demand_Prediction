@@ -47,3 +47,68 @@ Based on the analysis of related projects, there are a few takeaways:
 4.	Majority of the authors have applied RMSE as the evaluation score, however, it should be noted that RMSE is not the best evaluation metric, so other metrics should be explored for better model evaluation (Hossin and Sulaiman, 2015); and
 
 5.	Using GridSearch have significantly lowered down the error which can be seen in Harding (2021) RF model, Baek (2021) LR and RR model;
+
+
+## Gap & Scope Analysis
+
+The analysis presented above have clearly demonstrated the strengths and weaknesses of the techniques used to predict the bike-sharing demand. This section will introduce some questions to address the loopholes within the related projects to achieve the objectives of this project.
+
+1.	Do regression models perform better with the more parameter tuning?
+
+2.	Does outlier treatment improve the prediction since it is not widely used in the related works?
+
+3.	Does data scaling enhance the model performance?
+
+
+The evaluation of the related projects has presented some gaps within the researched area. This part will scope down the problems identified to reach the stated objectives:
+
+1.	Model improvement will only be done on kernels of Decision Tree, Random Forest, and Gradient Boosting;
+
+2.	Outlier treatment will be performed on necessary variables to investigate whether it will enhance the performance of the models; and
+
+3.	Data scaling will be carried out to test the model performance.
+
+
+## Exploratory Data Analysis 
+
+1. Description of Features
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Descriptions_Features.png)
+
+2. Overview of the Features
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Diagonal_Network.png)
+
+As shown in the diagonal network, there are 13 features in the dataset. 7 of the independent variables (i.e., instant, temp, atemp, humidity, windspeed, casual, registered) are integer whereas 4 of them are factor. The dependent variable (i.e., count) that predicts the demand of the bike-sharing is integer. Additionally, the date of the bike rented (i.e., datetime) is datetime type.
+
+3. Missing Values
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Missing_Values.png)
+
+Based on the missing values plot, there is no missing values in the dataset.
+
+4. Frequecy Distribution of Continuous Variables
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Histogram.png)
+
+The summary of the observations based on the histogram can be found below:
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Histogram_Findings.png)
+
+5. Normality of Data Distribution
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/QQ_Plot.png)
+
+QQ plot is another clearer tool to observe the distribution of the continuous data by looking at the head and tail curve. The closer the tail to the normality line, the distribution is more normal. The QQ plot above supports the observation in the histogram where the tails of count, casual and registered significantly move away from the normality line which means there are extreme data within these variables.
+
+6. Frequency of Discrete Variables
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Bar_Chart_Frequency.png)
+
+The frequency of each variables can be observed in the tables and the bar chart. Winter, not holiday, working day and clear weather are observed to have the most frequency in the dataset.
+
+7. Correlation Analysis
+
+
+
+
