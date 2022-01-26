@@ -1,7 +1,9 @@
 # Bike-Sharing_Demand_Prediction
 
 *Source codes can be found in the repository under Bike_Sharing_Demand_Prediction
-*HTML version of the source codes: file:///Users/lamyingxian/Desktop/Desktop%20-%20iMac%20Lam/DSBA_2021/4.%20Applied%20Machine%20Learning/3.%20Assignments-20210215/Assignment%20-%20Part%20B/LAM_YING_XIAN_TP063038_Codes.html
+
+
+*HTML version of the source codes: [HTML_Bike-Sharing_Demand_Prediction](file:///Users/lamyingxian/Desktop/Desktop%20-%20iMac%20Lam/DSBA_2021/4.%20Applied%20Machine%20Learning/3.%20Assignments-20210215/Assignment%20-%20Part%20B/LAM_YING_XIAN_TP063038_Codes.html)
 
 ## Problem Statement
 
