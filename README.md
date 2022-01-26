@@ -181,7 +181,7 @@ It can be concluded that the model of gradient boosting regression that have und
 
 ## Results Analysis & Recommendations
 
-The part will provide the answers that discovered from the analysis above for the gap analysis.
+**The part will provide the answers that discovered from the analysis above for the gap analysis.**
 
 1.	Do regression models perform better with the more parameter tuning?
 
@@ -196,7 +196,9 @@ According to the analysis above, the application of outlier treatment has signif
 Surprisingly, data scaling does not enhance the performance of the three tree-based models and this could be caused by the high dimensional data and the insufficient training sample.
 
 
-After the analysis of the experiments and the related works, several recommendations will be provided as follows:
+
+
+**After the analysis of the experiments and the related works, several recommendations will be provided as follows:**
 
 1.	Previous works performed by the journal article authors and Kaggle contributors should be evaluated together because significant insights could be observed as both researchers and contributors have different approaches in training a model;
 
