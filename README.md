@@ -1,5 +1,7 @@
 # Bike-Sharing_Demand_Prediction
 
+*Source codes can be found in the repository under Bike_Sharing_Demand_Prediction
+
 ## Problem Statement
 
 One of the biggest challenges faced in the bike-sharing system is the unavailability or shortage of bike. This issue has attracted numerous researchers to predict the demand of bike-sharing so that the company is able to redistribute the bikes efficiently and accurately. Correctly predicting the count of the bikes can be challenging especially when the data collected are often imbalance (Sathiskumer and Cho, 2020a). Moreover, despite the several efforts to train models to predict the demand, there is no consensus on which machine learning techniques that will provide the best performance due to the different features applied (Albuquerque et al., 2021). Meanwhile, no standardised features have proven to be the variables that will significantly improve the models (Albuquerque et al., 2021). Lastly, it is observed that feature engineering is heavily focused in Kaggle kernels, but not in published journal articles. As a result, this report will investigate three main areas such as the best performing machine learning techniques, the feature engineering methods and the features that will significantly enhance the prediction of the bike-sharing demand.
@@ -71,23 +73,23 @@ The evaluation of the related projects has presented some gaps within the resear
 
 ## Exploratory Data Analysis 
 
-1. Description of Features
+#### 1. Description of Features
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Descriptions_Features.png)
 
-2. Overview of the Features
+#### 2. Overview of the Features
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Diagonal_Network.png)
 
 As shown in the diagonal network, there are 13 features in the dataset. 7 of the independent variables (i.e., instant, temp, atemp, humidity, windspeed, casual, registered) are integer whereas 4 of them are factor. The dependent variable (i.e., count) that predicts the demand of the bike-sharing is integer. Additionally, the date of the bike rented (i.e., datetime) is datetime type.
 
-3. Missing Values
+#### 3. Missing Values
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Missing_Values.png)
 
 Based on the missing values plot, there is no missing values in the dataset.
 
-4. Frequecy Distribution of Continuous Variables
+#### 4. Frequency Distribution of Continuous Variables
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Histogram.png)
 
@@ -95,20 +97,45 @@ The summary of the observations based on the histogram can be found below:
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Histogram_Findings.png)
 
-5. Normality of Data Distribution
+#### 5. Normality of Data Distribution
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/QQ_Plot.png)
 
 QQ plot is another clearer tool to observe the distribution of the continuous data by looking at the head and tail curve. The closer the tail to the normality line, the distribution is more normal. The QQ plot above supports the observation in the histogram where the tails of count, casual and registered significantly move away from the normality line which means there are extreme data within these variables.
 
-6. Frequency of Discrete Variables
+#### 6. Frequency of Discrete Variables
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Bar_Chart_Frequency.png)
 
 The frequency of each variables can be observed in the tables and the bar chart. Winter, not holiday, working day and clear weather are observed to have the most frequency in the dataset.
 
-7. Correlation Analysis
+#### 7. Correlation Analysis
 
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Correlation_Analysis.png)
 
+Heatmap is a visualization used to analyse the relationship between different features. The darker the red colour means the features are more correlated. Contrary, the darker the blue colour indicates the features are less correlated. Highly correlated features should be removed as they may affect the performance of the model. Based on the heatmap above, count and registered are highly correlated as well as temp and atemp. 
 
+#### 8. Outliers Identification
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Box_Plot.png)
+
+The purpose of boxplot is to identify any outliers in the data. According to the box plot shown above, casual and windspeed have the most extreme outliers.
+
+#### Exploratory Data Analysis Findings
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/EDA_Findings.png)
+
+The following are the data pre-processing that have been performed which can be explored in the source codes:
+
+A.	Data splitting: split the data into train and test dataset with the proportion of 70%-30%;
+
+B.	Data cleaning: outliers will be removed;
+
+C.	Data sampling: the data will be up-sampling to neutralise the dependent variable;
+
+D.	Data scaling: to rescale the non-normally distributed continuous data;
+
+E.	Data transformation: the skewed data will be transformed with logarithm; and
+
+F.	Feature selection: highly correlated features will be manually removed.
 
