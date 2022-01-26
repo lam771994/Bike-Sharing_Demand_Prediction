@@ -1,4 +1,4 @@
-# Bike-Sharing_Demand_Prediction
+# Bike-Sharing Demand Prediction
 
 *Source codes can be found in the repository under Bike_Sharing_Demand_Prediction
 
