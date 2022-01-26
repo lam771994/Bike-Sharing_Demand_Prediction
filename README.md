@@ -139,3 +139,76 @@ E.	Data transformation: the skewed data will be transformed with logarithm; and
 
 F.	Feature selection: highly correlated features will be manually removed.
 
+## Model Implementation & Validation
+
+#### 1. Dataset for Each Pre-Processing Technique
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Dataset.png)
+
+#### 2. Model Experimentation Plan
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Model%20Experiment%20Plan.png)
+
+#### 3. Summary of Results for the Experiments of **Decision Tree Regression**
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Decision_Tree_Regression.png)
+
+#### 4. Summary of Results for the Experiments of **Random Forest Regression**
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Random_Forest_Regression.png)
+
+#### 5. Summary of Results for the Experiments of **Gradient Boosting Regression**
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Gradient_Boosting_Regression.png)
+
+#### 6. Models Assumptions vs Observations in Experiments
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Models%20Assumptions%20vs%20Observations%20in%20Experiments.png)
+
+#### 7. The Effect of Hyperparameter & Data Pre-Processing Techniques on Models Performance
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Effects_of_Hyperparameter_Tuning%26Pre_processing_Techniques_on_Models_Performance.png)
+
+#### 8. Models Performance in Experiments
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Models_Performance_in_Experiments.png)
+
+#### 9. Models Performance: Experiments vs Related Projects
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Experiments%20vs%20Related%20Works.png)
+
+It can be concluded that the model of gradient boosting regression that have undergone hyperparameter tuning and outlier treatment is the most suitable predictive model for the topic and the dataset.
+
+## Results Analysis & Recommendations
+
+The part will provide the answers that discovered from the analysis above for the gap analysis.
+
+1.	Do regression models perform better with the more parameter tuning?
+
+Based on the comparison between experiments and the related works, the tree-based regression models perform better with the hyperparameter tuning.
+
+2.	Does outlier treatment improve the prediction since it is not widely used in the related works?
+
+According to the analysis above, the application of outlier treatment has significantly improved the performance of the three tree-based models.
+
+3.	Does data scaling enhance the model performance?
+
+Surprisingly, data scaling does not enhance the performance of the three tree-based models and this could be caused by the high dimensional data and the insufficient training sample.
+
+
+After the analysis of the experiments and the related works, several recommendations will be provided as follows:
+
+1.	Previous works performed by the journal article authors and Kaggle contributors should be evaluated together because significant insights could be observed as both researchers and contributors have different approaches in training a model;
+
+2.	Experiment plan should be conducted to provide clear aim and objectives for the report;
+
+3.	Plots are important to understand the patterns of the data, however statistical numbers should be emphasised more rather than making assumptions from the plots;
+
+4.	 Understanding the parameters for each model are essential because not all parameters will provide significant outcomes;
+
+5.	Random forest model may not be the best model if the dataset is high dimensional; and
+
+6.	In the aspect of the domain knowledge, the location of the bike-sharing system, age of the bike user and income of the user should be collected for better understanding of the bike-sharing demand.
+
+7.	Deep learning method such as the neural network should be explored deeper as it could potentially provide better accuracy in the prediction of the bike sharing demand.
+
