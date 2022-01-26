@@ -16,3 +16,23 @@ C.	To explore the correlation between features and discover the most relevant fe
 ## Analysis of Other Related Projects
 
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_1.png)
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_2.png)
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_3.png)
+
+####Summary of the Related Projects:
+
+There are several techniques within the feature engineering which will be listed and numbered below:
+(1) imputation; 
+(2) outliers management; 
+(3) binning; 
+(4) data transformation; 
+(5) one-hot encoding; 
+(6) data sampling; 
+(7) data scaling;  
+(8) data extraction; 
+(9) data splitting; and 
+(10) No information available but feature engineering is directly or indirectly stated 
+
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Summary_Related_Projects_1.png)
+![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Summary_Related_Projects_2.png)
+
