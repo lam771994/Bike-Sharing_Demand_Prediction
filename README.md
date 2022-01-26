@@ -19,7 +19,7 @@ C.	To explore the correlation between features and discover the most relevant fe
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_2.png)
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Related_Works_3.png)
 
-####Summary of the Related Projects:
+#### Summary of the Related Projects:
 
 There are several techniques within the feature engineering which will be listed and numbered below:
 (1) imputation; 
@@ -36,3 +36,14 @@ There are several techniques within the feature engineering which will be listed
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Summary_Related_Projects_1.png)
 ![alt text](https://github.com/lam771994/Bike-Sharing_Demand_Prediction/blob/main/Photos/Summary_Related_Projects_2.png)
 
+Based on the analysis of related projects, there are a few takeaways:
+
+1.	Higher accuracy and lower error can be observed in the feature engineered data, especially when the data is normalised and transformed. It can be obviously seen in the RF model trained by Harding (2021), Gradient Boosting built by Taranu (2020) as well as KNN and DT model produced by Salahat (2021). A significant observation from these models is the application of data transformation;
+
+2.	Gradient Boosting is arguably the most stable method because it has the lowest error among all the models (Taranu, 2020);
+
+3.	Kaggle contributors trained the most stable kernels as compared authors that published their models. This can be observed in the RF model trained by a Kaggle master, Harding (2021) where the RMSLE is only 2.03 as compared to the published model built by Xu et al. (2020) who produced RMSLE of 4.28. Another observation can be found in the Gradient Boosting model built by Taranu (2020) where the Kaggle contributor has RMSLE of 0.28 as compared to the published model that has 11.43;
+
+4.	Majority of the authors have applied RMSE as the evaluation score, however, it should be noted that RMSE is not the best evaluation metric, so other metrics should be explored for better model evaluation (Hossin and Sulaiman, 2015); and
+
+5.	Using GridSearch have significantly lowered down the error which can be seen in Harding (2021) RF model, Baek (2021) LR and RR model;
